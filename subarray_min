@@ -1,0 +1,58 @@
+#include <iostream>
+#include <vector>
+#include <stack>
+using namespace std;
+
+int sumSubarrayMins(vector<int>& arr) {
+    int n = arr.size();
+    vector<int> next(n), prev(n);
+
+    // Find the next smaller element's index for each element
+    stack<int> nextSmaller;
+    nextSmaller.push(n);
+
+    for (int i = n - 1; i >= 0; i--) {
+        while (nextSmaller.top() != n && arr[nextSmaller.top()] > arr[i]) {
+            nextSmaller.pop();
+        }
+        next[i] = nextSmaller.top();
+        nextSmaller.push(i);
+    }
+
+    // Find the previous smaller (or equal) element's index for each element
+    stack<int> prevSmaller;
+    prevSmaller.push(-1);
+
+    for (int i = 0; i < n; i++) {
+        while (prevSmaller.top() != -1 && arr[prevSmaller.top()] >= arr[i]) {
+            prevSmaller.pop();
+        }
+        prev[i] = prevSmaller.top();
+        prevSmaller.push(i);
+    }
+
+    long long sum = 0;
+    const int MOD = 1e9 + 7;
+
+    for (int i = 0; i < n; i++) {
+        int left = i - prev[i];
+        int right = next[i] - i;
+        sum = (sum + (long long)arr[i] * left * right) % MOD;
+    }
+
+    return sum;
+}
+
+int main() {
+    int n;
+    cin >> n;
+
+    vector<int> v(n);
+    for (int i = 0; i < n; i++) {
+        cin >> v[i];
+    }
+
+    cout << sumSubarrayMins(v) << endl;
+
+    return 0;
+}
