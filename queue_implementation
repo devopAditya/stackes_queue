@@ -1,0 +1,63 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+class Queue {
+    int* data;
+    int frontIndex;
+    int rearIndex;
+    int capacity;
+
+public:
+    Queue() {
+        capacity = 10001;
+        data = new int[capacity];
+        frontIndex = 0;
+        rearIndex = 0;
+    }
+
+    bool isEmpty() {
+        return frontIndex == rearIndex;
+    }
+
+    void enqueue(int value) {
+        if (rearIndex == capacity) {
+            cout << "The queue is full" << endl;
+        } else {
+            data[rearIndex++] = value;
+        }
+    }
+
+    int dequeue() {
+        if (isEmpty()) {
+            cout << "The queue is empty" << endl;
+            frontIndex = 0;
+            rearIndex = 0;
+            return -1;
+        } else {
+            return data[frontIndex++];
+        }
+    }
+
+    int front() {
+        if (isEmpty()) {
+            cout << "The queue is empty" << endl;
+            return -1;
+        } else {
+            return data[frontIndex];
+        }
+    }
+};
+
+int main() {
+    Queue q;
+    q.enqueue(12);
+    q.enqueue(9);
+    q.enqueue(2);
+    q.enqueue(1);
+
+    q.dequeue();
+    cout << q.front() << endl;
+
+    return 0;
+}
